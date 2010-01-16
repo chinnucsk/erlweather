@@ -21,7 +21,7 @@ edoc:
 
 run:
 	make all
-	erl -pa ebin -run weather start -run init stop -noshell 
+	erl -pa ebin -run weather boot -run init stop -noshell 
 
 shell:
 	make all

@@ -1,11 +1,22 @@
+%% @author Zach Peters
+%% @copyright  2010 The Helpful Hacker
+%% @doc this is where my doc goes
+%% @version 0.0.1
 -module(weather).
--compile(export_all).
+-export([boot/0, start/0, stop/0, update/0, current/0, updateLoop/2]).
 
+%% Include xmerl xml parsing library (your path may vary)
 -include("/usr/lib/erlang/lib/xmerl-1.2/include/xmerl.hrl").
 
+%% See http://www.nws.noaa.gov/tg/siteloc.shtml for station ids
 -define(STATION, "KCWI").
 -define(BASE_URL, "http://www.weather.gov/xml/current_obs/").
 
+
+%% @spec weather_url_for(StationIdentifier) -> Url
+%%    StationIdentifier = term()
+%%    Url = term()
+%% @doc returns url (from weather.gov) string for a given StationIdentifier
 weather_url_for(StationIdentifier) ->
     ?BASE_URL ++ StationIdentifier ++ ".xml".
 
@@ -53,3 +64,11 @@ update() ->
 
 current() ->
     weather ! current.
+
+boot() ->
+    weather:start(),
+    weather:update(),
+    timer:sleep(100),
+    weather:current(),
+    timer:sleep(100),
+    weather:stop().
